@@ -1,0 +1,152 @@
+[project]
+name = "liquid-audio"
+version = "1.3.0"
+description = "Liquid Audio - Speech-to-Speech audio models"
+readme = "README.md"
+authors = [
+    { name = "Liquid AI, Inc", email = "support@liquid.ai" }
+]
+license = "LicenseRef-LFM-Open-License-v1.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+dependencies = [
+    "accelerate>=1.10.1",
+    "datasets>=4.8.4",
+    "einops>=0.8.1",
+    "jiwer>=4.0.0,<5",
+    "librosa>=0.11.0",
+    "sentencepiece>=0.2.1",
+    "soundfile>=0.13.1",
+    "torch>=2.8.0",
+    "torchaudio>=2.8.0",
+    "transformers>=4.56.1,<5",
+    "tqdm>=4.67.1",
+]
+keywords = ["Liquid AI", "LFM", "LFM2", "Audio", "Speech-to-Speech"]
+
+[project.urls]
+Homepage = "https://www.liquid.ai/"
+Repository = "https://github.com/Liquid4All/liquid-audio/"
+Issues = "https://github.com/Liquid4All/liquid-audio/issues"
+
+[project.scripts]
+liquid-audio-demo = "liquid_audio.demo.chat:main [demo]"
+
+[project.optional-dependencies]
+demo = [
+    "fastrtc[vad]>=0.0.30",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.13,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipython>=9.4.0",
+    "mypy>=1.17.1",
+    "pytest>=8.4.0,<10",
+    "ruff>=0.12.10",
+]
+
+[tool.ruff]
+line-length = 127 # The GitHub editor is 127 chars wide
+extend-exclude = [
+    "src/liquid_audio/model/conformer",
+    "src/liquid_audio/moshi",
+]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # tryceratops
+    "TRY",
+    # perflint
+    "PERF",
+    # refurb
+    "FURB",
+    #ruff
+    "RUF",
+]
+
+ignore = [
+    # These conflict with ruff format
+    "W191",
+    "E111",
+    "E114",
+    "E117",
+    "E501",
+    "D206",
+    "D300",
+    "Q000",
+    "Q001",
+    "Q002",
+    "Q003",
+    "COM812",
+    "COM819",
+    "ISC001",
+    "ISC002",
+    # Probably more readable without ternary operators
+    "SIM108",
+    # "Ambiguous variable name", probably too strict for kernel variables
+    "E741",
+    # Allow error message outside of class
+    "TRY003",
+    # Allow ABCs without abstract methods
+    "B024",
+]
+
+[tool.mypy]
+mypy_path = "src"
+packages = [
+    "liquid_audio",
+]
+exclude = [
+    "liquid_audio.model.conformer",
+]
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+strict_equality = true
+extra_checks = true
+
+check_untyped_defs = true
+
+# TODO: check if needed
+[[tool.mypy.overrides]]
+module = [
+    "accelerate.*",
+    "torchaudio.*",
+    "datasets.*",
+    "soundfile.*",
+    "tqdm.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "liquid_audio.demo.*",
+]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = [
+    'liquid_audio.moshi.*'
+]
+ignore_errors = true

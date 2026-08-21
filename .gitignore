@@ -1,0 +1,18 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Local datasets and training outputs (repository root only)
+/data/
+/outputs/
+/tmp/
+
+# MacOS
+.DS_Store
